@@ -15,7 +15,8 @@ class Book {
   final bool completed;
   final int? currentPosition;
   final String isFree;
-  final String language; // Add language field
+  final String language;
+  final String abbr; // Language abbreviation field
 
   Book({
     required this.id,
@@ -32,10 +33,20 @@ class Book {
     required this.tagIds,
     required this.authorId,
     required this.isFree,
-    required this.language, // Add language parameter
+    required this.language,
+    required this.abbr,
     this.completed = false,
     this.currentPosition,
   });
+
+  // Getter to check if book is in Assamese
+  bool get isAssamese => abbr.toLowerCase() == 'as';
+
+  // Getter to check if book is in English
+  bool get isEnglish => abbr.toLowerCase() == 'en';
+
+  // Getter to get standardized language code
+  String get languageCode => abbr.toLowerCase();
 
   factory Book.fromJson(Map<String, dynamic> json) {
     String cleanDescription =
@@ -59,7 +70,9 @@ class Book {
       tagIds: safeToString(json['tag_ids']),
       authorId: safeToString(json['author_id']),
       isFree: (json['is_free'] ?? 'no').toString().toLowerCase(),
-      language: (json['language'] ?? 'as').toString(), // Default to Assamese
+      language: (json['language'] ?? 'as').toString(),
+      abbr: (json['abbr'] ?? 'as')
+          .toString(), // Get language abbreviation from API
       completed: json['completed'] ?? false,
       currentPosition: json['current_position'] is int
           ? json['current_position']
@@ -85,9 +98,10 @@ class Book {
       'tag_ids': tagIds,
       'author_id': authorId,
       'is_free': isFree,
+      'language': language,
+      'abbr': abbr,
       'completed': completed,
       'current_position': currentPosition,
-      'language': language,
     };
   }
 }

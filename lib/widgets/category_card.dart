@@ -43,10 +43,13 @@ class CategoryCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.network(
-                      'https://granthakatha.com/pdoapp/public/storage/images/${category.image}',
+                      'https://granthakatha.com/attachments/shop_images/${category.image}',
                       fit: BoxFit.cover,
                       color: Colors.black26,
                       colorBlendMode: BlendMode.darken,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Theme.of(context).primaryColor.withOpacity(0.2),
+                      ),
                     ),
                   ),
                 ),

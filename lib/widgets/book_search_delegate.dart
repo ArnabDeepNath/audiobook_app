@@ -30,6 +30,8 @@ class BookSearchDelegate extends SearchDelegate {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
+        // Reset all filters when leaving search screen
+        bookProvider.resetAllFilters();
         close(context, null);
       },
     );
@@ -43,6 +45,25 @@ class BookSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return _buildSearchResults();
+  }
+
+  @override
+  void showResults(BuildContext context) {
+    bookProvider.setFilteringMode(true);
+    super.showResults(context);
+  }
+
+  @override
+  void showSuggestions(BuildContext context) {
+    bookProvider.setFilteringMode(true);
+    super.showSuggestions(context);
+  }
+
+  @override
+  void close(BuildContext context, result) {
+    bookProvider.setFilteringMode(false);
+    bookProvider.resetAllFilters();
+    super.close(context, result);
   }
 
   Widget _buildSearchResults() {
@@ -61,6 +82,10 @@ class BookSearchDelegate extends SearchDelegate {
       );
     }
 
+    // Sort books by abbreviation for consistent ordering
+    final sortedBooks = List<Book>.from(books);
+    sortedBooks.sort((a, b) => a.abbr.compareTo(b.abbr));
+
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -69,10 +94,10 @@ class BookSearchDelegate extends SearchDelegate {
         mainAxisSpacing: 16.0,
         crossAxisSpacing: 16.0,
       ),
-      itemCount: books.length,
+      itemCount: sortedBooks.length,
       itemBuilder: (context, index) {
         return BookCard(
-          book: books[index],
+          book: sortedBooks[index],
           isInLibrary: false,
         );
       },

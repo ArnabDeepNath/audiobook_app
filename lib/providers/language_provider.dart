@@ -36,6 +36,13 @@ class LanguageProvider with ChangeNotifier {
       'retry': 'Retry',
       'noBooks': 'No books found',
       'noBookmarks': 'No bookmarks yet',
+      'library_stats': 'Library Statistics',
+      'English': 'English',
+      'Assamese': 'Assamese',
+      'termsTitle': "Terms and Condiiton",
+      'about': "About Us",
+      'terms': "Terms and Condiitons",
+      'privacyPolicy': "Privacy Policy"
     },
     'as': {
       'appTitle': 'অডিঅ\'বুক স্টোৰ',
@@ -58,6 +65,13 @@ class LanguageProvider with ChangeNotifier {
       'retry': 'পুনৰ চেষ্টা কৰক',
       'noBooks': 'কোনো কিতাপ পোৱা নগ\'ল',
       'noBookmarks': 'এতিয়ালৈকে কোনো বুকমাৰ্ক নাই',
+      'library_stats': 'লাইব্ৰেৰী পৰিসংখ্যা',
+      'English': 'ইংৰাজী',
+      'Assamese': 'অসমীয়া',
+      'termsTitle': 'চৰ্তাৱলী',
+      'about': 'আমাৰ বিষয়ে',
+      'terms': "চৰ্তাৱলী",
+      'privacyPolicy': "গোপনীয়তা নীতি"
     },
   };
 

@@ -90,6 +90,35 @@ class BookCard extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      // Language indicator
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: book.isAssamese
+                              ? Colors.orange.shade100
+                              : Colors.blue.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color:
+                                book.isAssamese ? Colors.orange : Colors.blue,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: Text(
+                          book.languageCode.toUpperCase(),
+                          style: TextStyle(
+                            color: book.isAssamese
+                                ? Colors.orange.shade800
+                                : Colors.blue.shade800,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       const Spacer(),
                       if (book.isFree == 'yes')
                         Container(

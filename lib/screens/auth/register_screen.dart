@@ -9,14 +9,12 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -29,13 +27,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       final provider = Provider.of<BookProvider>(context, listen: false);
       await provider.register(
-        _usernameController.text,
         _emailController.text,
         _passwordController.text,
       );
-      // After successful registration, login the user
-      await provider.login(_emailController.text, _passwordController.text);
-      Navigator.pushReplacementNamed(context, '/home');
+      // Show success message and navigate to login
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text('Registration successful! Please login to continue.')),
+      );
+      Navigator.pushReplacementNamed(context, '/login');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
@@ -57,23 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a username';
-                  }
-                  if (value.length < 3) {
-                    return 'Username must be at least 3 characters';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(

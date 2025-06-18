@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/book_model.dart';
 import '../widgets/book_card.dart';
+import '../providers/book_provider.dart';
 
 class BookListScreen extends StatefulWidget {
   final String title;
@@ -19,19 +21,30 @@ class BookListScreen extends StatefulWidget {
 class _BookListScreenState extends State<BookListScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-
   List<Book> get _filteredBooks {
-    if (_searchQuery.isEmpty) return widget.books;
-    return widget.books
-        .where((book) =>
-            book.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-            book.description.toLowerCase().contains(_searchQuery.toLowerCase()))
-        .toList();
+    List<Book> filtered;
+    if (_searchQuery.isEmpty) {
+      filtered = widget.books;
+    } else {
+      filtered = widget.books
+          .where((book) =>
+              book.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              book.description
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()))
+          .toList();
+    }
+    // Sort by language abbreviation
+    filtered.sort((a, b) => a.abbr.compareTo(b.abbr));
+    return filtered;
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    // Reset filters when leaving the screen
+    Provider.of<BookProvider>(context, listen: false).setFilteringMode(false);
+    Provider.of<BookProvider>(context, listen: false).resetAllFilters();
     super.dispose();
   }
 

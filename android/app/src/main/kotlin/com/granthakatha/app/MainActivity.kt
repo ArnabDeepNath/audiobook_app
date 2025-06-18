@@ -1,4 +1,4 @@
-package com.example.audiobook_app
+package com.granthakatha.app
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

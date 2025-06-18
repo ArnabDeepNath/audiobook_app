@@ -3,15 +3,26 @@ import 'package:provider/provider.dart';
 import '../providers/book_provider.dart';
 import '../providers/language_provider.dart';
 import '../models/category_model.dart';
+import '../models/book_model.dart';
 import 'book_list_screen.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({Key? key}) : super(key: key);
+  final String? categoryFilter;
+  const CategoriesScreen({Key? key, this.categoryFilter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final bookProvider = Provider.of<BookProvider>(context);
     final lang = Provider.of<LanguageProvider>(context);
+
+    // Set the category filter
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (categoryFilter != null) {
+        bookProvider.setCategoryFilter(categoryFilter);
+      }
+    });
+
+    final categories = bookProvider.filteredCategories;
 
     return Scaffold(
       appBar: AppBar(
@@ -25,9 +36,9 @@ class CategoriesScreen extends StatelessWidget {
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
-        itemCount: bookProvider.categories.length,
+        itemCount: categories.length,
         itemBuilder: (context, index) {
-          Category category = bookProvider.categories[index];
+          Category category = categories[index];
           return _buildCategoryCard(context, category, bookProvider);
         },
       ),
@@ -47,18 +58,25 @@ class CategoriesScreen extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
+          // Enable filtering mode and update category selection
+          provider.setFilteringMode(true);
           provider.toggleCategory(category.id);
+
+          // Get filtered books and sort them by abbreviation
+          List<Book> categoryBooks = provider
+              .getFilteredBooks()
+              .where(
+                (book) => book.shopCategorie == category.id,
+              )
+              .toList();
+          categoryBooks.sort((a, b) => a.abbr.compareTo(b.abbr));
+
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BookListScreen(
                 title: category.name,
-                books: provider
-                    .getFilteredBooks()
-                    .where(
-                      (book) => book.shopCategorie == category.id,
-                    )
-                    .toList(),
+                books: categoryBooks,
               ),
             ),
           );
