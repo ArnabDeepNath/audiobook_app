@@ -216,9 +216,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildBookSection(String title, List<Book> books, String type) {
+  Widget _buildBookSection(String title, List<Book> books, String type,
+      [bool isRecent = false]) {
     List<Book> filteredBooks;
-    if (type.isEmpty) {
+
+    if (isRecent) {
+      // For Recently Added, sort by time (most recent first) and take latest books
+      filteredBooks = List.from(books);
+      filteredBooks
+          .sort((a, b) => b.time.compareTo(a.time)); // Reverse sort by time
+      filteredBooks = filteredBooks.take(10).toList();
+    } else if (type.isEmpty) {
       filteredBooks = books.take(10).toList();
     } else {
       filteredBooks = books
@@ -227,8 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
     }
 
-    // Sort by language abbreviation
-    filteredBooks.sort((a, b) => a.abbr.compareTo(b.abbr));
+    // Sort by language abbreviation (except for Recently Added)
+    if (!isRecent) {
+      filteredBooks.sort((a, b) => a.abbr.compareTo(b.abbr));
+    }
 
     if (filteredBooks.isEmpty) return const SizedBox.shrink();
     final bookProvider = Provider.of<BookProvider>(context);
@@ -251,7 +261,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   bookProvider.setFilteringMode(true);
                   bookProvider.setShowAudioOnly(type == 'audio');
                   List<Book> booksToPass;
-                  if (type.isEmpty) {
+
+                  if (title == 'Recently Added') {
+                    // For Recently Added: sort by time (most recent first)
+                    booksToPass = List.from(books);
+                    booksToPass.sort((a, b) => b.time.compareTo(a.time));
+                  } else if (type.isEmpty) {
                     booksToPass = books;
                   } else {
                     booksToPass = books
@@ -259,8 +274,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             book.fileType.toLowerCase() == type.toLowerCase())
                         .toList();
                   }
-                  // Sort books before passing to BookListScreen
-                  booksToPass.sort((a, b) => a.abbr.compareTo(b.abbr));
+
+                  // Sort books before passing to BookListScreen (except for Recently Added)
+                  if (title != 'Recently Added') {
+                    booksToPass.sort((a, b) => a.abbr.compareTo(b.abbr));
+                  }
 
                   Navigator.push(
                     context,
@@ -416,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildTopCategories(),
             _buildBookSection('E-Books', books, 'pdf'),
             _buildBookSection('Audiobooks', books, 'audio'),
-            _buildBookSection('Recently Added', books, ''),
+            _buildBookSection('Recently Added', books, '', true),
           ],
         ),
       ),

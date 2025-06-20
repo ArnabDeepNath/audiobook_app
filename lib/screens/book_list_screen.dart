@@ -34,8 +34,11 @@ class _BookListScreenState extends State<BookListScreen> {
                   .contains(_searchQuery.toLowerCase()))
           .toList();
     }
-    // Sort by language abbreviation
-    filtered.sort((a, b) => a.abbr.compareTo(b.abbr));
+
+    // Only sort by language abbreviation if not "Recently Added"
+    if (widget.title != 'Recently Added') {
+      filtered.sort((a, b) => a.abbr.compareTo(b.abbr));
+    }
     return filtered;
   }
 

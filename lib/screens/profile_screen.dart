@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/book_provider.dart';
 import '../providers/language_provider.dart';
 import '../models/user_model.dart';
@@ -31,6 +32,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nameController.dispose();
     _emailController.dispose();
     super.dispose();
+  }
+
+  void _showDeleteAccountConfirmation(
+      BuildContext context, LanguageProvider lang) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(lang.translate('deleteAccount')),
+          content: Text(lang.translate('deleteAccountConfirmation')),
+          actions: <Widget>[
+            TextButton(
+              child: Text(lang.translate('cancel')),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                lang.translate('delete'),
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _launchDeleteAccountPage();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchDeleteAccountPage() async {
+    const String url =
+        'https://granthakatha.com/pdoapp/public/delete_account.html';
+    try {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open delete account page'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -138,6 +187,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
                 },
                 child: Text(lang.translate('updateProfile')),
+              ),
+              const SizedBox(height: 48),
+              Divider(),
+              const SizedBox(height: 16),
+              Text(
+                lang.translate('accountSettings'),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.red[700],
+                ),
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                icon: Icon(Icons.delete_forever, color: Colors.red[700]),
+                label: Text(
+                  lang.translate('deleteAccount'),
+                  style: TextStyle(color: Colors.red[700]),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.red[300]!),
+                ),
+                onPressed: () => _showDeleteAccountConfirmation(context, lang),
               ),
             ],
           ),

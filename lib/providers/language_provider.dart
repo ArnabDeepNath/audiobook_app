@@ -42,7 +42,13 @@ class LanguageProvider with ChangeNotifier {
       'termsTitle': "Terms and Condiiton",
       'about': "About Us",
       'terms': "Terms and Condiitons",
-      'privacyPolicy': "Privacy Policy"
+      'privacyPolicy': "Privacy Policy",
+      'accountSettings': "Account Settings",
+      'deleteAccount': "Delete Account",
+      'deleteAccountConfirmation':
+          "You will be redirected to a web page where you can delete your account. Are you sure you want to continue?",
+      'delete': "Delete",
+      'cancel': "Cancel"
     },
     'as': {
       'appTitle': 'অডিঅ\'বুক স্টোৰ',
@@ -71,7 +77,13 @@ class LanguageProvider with ChangeNotifier {
       'termsTitle': 'চৰ্তাৱলী',
       'about': 'আমাৰ বিষয়ে',
       'terms': "চৰ্তাৱলী",
-      'privacyPolicy': "গোপনীয়তা নীতি"
+      'privacyPolicy': "গোপনীয়তা নীতি",
+      'accountSettings': "একাউণ্ট ছেটিংছ",
+      'deleteAccount': "একাউণ্ট বিলোপ কৰক",
+      'deleteAccountConfirmation':
+          "আপুনি আপোনাৰ একাউণ্ট বিলোপ কৰিব পৰা এটা ৱেব পৃষ্ঠালৈ পুনঃনিৰ্দেশিত হ'ব। আপুনি অব্যাহত ৰাখিব বিচাৰে নে?",
+      'delete': "বিলোপ কৰক",
+      'cancel': "বাতিল কৰক"
     },
   };
 
