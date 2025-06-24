@@ -1,4 +1,4 @@
-package com.granthakatha.app
+package com.grantha.katha
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
