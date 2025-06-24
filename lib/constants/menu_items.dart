@@ -29,11 +29,6 @@ final List<MenuItem> quickMenuItems = [
     route: '/poems',
   ),
   MenuItem(
-    title: 'Kids Hub',
-    icon: Icons.child_care,
-    route: '/kids-hub',
-  ),
-  MenuItem(
     title: 'Students Hub',
     icon: Icons.school,
     route: '/students-hub',

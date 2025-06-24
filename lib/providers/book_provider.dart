@@ -37,15 +37,15 @@ class BookProvider with ChangeNotifier {
   final String mediaBaseUrl = 'https://granthakatha.com';
   final String mediaApiUrl = 'https://granthakatha.com/pdoapp/public';
   final String localApiUrl = 'https://granthakatha.com/pdoapp/public';
-
   // Constants for filtering
   final Map<String, String> _tagFilters = {
-    'kids': '12', // Kids Hub tag ID
     'students': '11', // Students Hub tag ID
   };
   final Map<String, String> _categoryFilters = {
     'poems': '7', // Poems category ID
-  }; // Public getters
+  };
+
+  // Public getters
   bool get isAuthenticated => _token != null;
   List<Book> get books {
     // Filter books by current language and sort
@@ -75,6 +75,7 @@ class BookProvider with ChangeNotifier {
   String get currentLanguage => _currentLanguage;
   List<String> get selectedTagIds =>
       List.unmodifiable(_selectedTagIds.toList());
+
   // Return filtered categories based on current filter
   List<Category> get filteredCategories {
     if (_categories.isEmpty) return [];
@@ -82,12 +83,6 @@ class BookProvider with ChangeNotifier {
 
     print('Filtering categories by: ${_categoryFilter?.toLowerCase()}');
     switch (_categoryFilter?.toLowerCase()) {
-      case 'kids_hub':
-        final kidsBooks = _filterBooksByTagId(_tagFilters['kids']!);
-        final kidsCategoryIds = kidsBooks.map((b) => b.shopCategorie).toSet();
-        return _categories
-            .where((c) => kidsCategoryIds.contains(c.id))
-            .toList();
       case 'students_hub':
         final studentBooks = _filterBooksByTagId(_tagFilters['students']!);
         final studentCategoryIds =
@@ -608,9 +603,6 @@ class BookProvider with ChangeNotifier {
   List<Book> getFilteredBooksByType(String filterType) {
     List<Book> result;
     switch (filterType.toLowerCase()) {
-      case 'kids_hub':
-        result = _filterBooksByTagId(_tagFilters['kids']!);
-        break;
       case 'students_hub':
         result = _filterBooksByTagId(_tagFilters['students']!);
         break;

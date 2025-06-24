@@ -93,8 +93,6 @@ class MyApp extends StatelessWidget {
               '/privacy-policy': (context) => const PrivacyPolicyScreen(),
               '/terms': (context) => const TermsScreen(),
               '/about': (context) => const AboutScreen(),
-              '/kids-hub': (context) =>
-                  const CategoriesScreen(categoryFilter: 'kids_hub'),
               '/students-hub': (context) =>
                   const CategoriesScreen(categoryFilter: 'students_hub'),
               '/ebooks': (context) =>
